@@ -13,6 +13,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const dbConnect = require("./db/dbConnect");
 dbConnect();
 
+//Handle CORS
+app.use((request, response, next) => {
+	response.setHeader("Access-Control-Allow-Origin", "*");
+	response.setHeader(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+	);
+	response.setHeader(
+		"Access-Control-Allow-Methods",
+		"GET, POST, PUT, DELETE, PATCH, OPTIONS"
+	);
+	next();
+});
+
 app.get("/", (request, response, next) => {
 	response.json({ message: "Hey! This is your server response!" });
 	next();
