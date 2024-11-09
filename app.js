@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./db/userModel");
+const auth = require("./auth");
 
 // body parser configuration
 app.use(bodyParser.json());
@@ -48,7 +49,7 @@ app.post("/login", (request, response) => {
 		.then((user) => {
 			bcrypt
 				.compare(request.body.password, user.password)
-        //Do this if the passwords match
+				//Do this if the passwords match
 				.then((passwordCheck) => {
 					//Check if password matches
 					if (!passwordCheck) {
@@ -87,6 +88,16 @@ app.post("/login", (request, response) => {
 				error,
 			});
 		});
+});
+
+// Open endpoint
+app.get("/free-endpoint", (request, response) => {
+	response.json({ message: "Open access" });
+});
+
+// authentication endpoint
+app.get("/auth-endpoint", auth, (request, response) => {
+	response.json({ message: "Authorized access only" });
 });
 
 module.exports = app;
